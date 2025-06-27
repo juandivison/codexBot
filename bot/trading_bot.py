@@ -9,6 +9,9 @@ import pandas as pd
 from .config import Config
 from .database import Database
 from .indicators import Indicator, RSI, EMA, ATR, RSIVPivot
+
+from .indicators import Indicator, RSI, EMA, RSIVPivot
+
 from .market_data import BinanceFuturesProvider
 from .order_manager import OrderManager
 from .risk_management import RiskManager, RiskParameters
@@ -47,6 +50,10 @@ class TradingBot:
 
         self.risk_manager.update_account_balance(config.account_balance)
 
+                indicators=[RSI(), EMA(), RSIVPivot()],
+            )
+
+
     def start(self) -> None:
         threads = []
         for sym in self.symbol_contexts.keys():
@@ -81,6 +88,10 @@ class TradingBot:
                     if self.risk_manager.can_open_position(risk_amount):
                         self.logger.info("Pivote RSI en V detectado en %s", symbol)
                         self.order_manager.open_order(symbol, "long", price, signals)
+
+                    self.logger.info("Pivote RSI en V detectado en %s", symbol)
+                    self.order_manager.open_order(symbol, "long", price, signals)
+
                 time.sleep(1)
             except Exception as exc:  # pylint: disable=broad-except
                 self.logger.error("Error en el símbolo %s: %s", symbol, exc)

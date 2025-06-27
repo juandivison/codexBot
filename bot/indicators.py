@@ -37,6 +37,7 @@ class EMA(Indicator):
         return {f"ema_{self.period}": ema_values.iloc[-1]}
 
 
+
 class ATR(Indicator):
     """Average True Range for volatility."""
 
@@ -48,6 +49,7 @@ class ATR(Indicator):
             data['high'], data['low'], data['close'], timeperiod=self.period
         )
         return {"atr": atr_values.iloc[-1]}
+
 
 
 class RSIVPivot(Indicator):
@@ -68,6 +70,17 @@ class RSIVPivot(Indicator):
     def compute(self, data: pd.DataFrame) -> Dict[str, Any]:
         rsi = talib.RSI(data['close'], timeperiod=self.period)
         if len(rsi) < max(3, self.volume_window):
+
+    """Detecta un pivote en 'V' del RSI."""
+
+    def __init__(self, period: int = 14, oversold: int = 30, delta: float = 5.0) -> None:
+        self.period = period
+        self.oversold = oversold
+        self.delta = delta
+
+    def compute(self, data: pd.DataFrame) -> Dict[str, Any]:
+        rsi = talib.RSI(data['close'], timeperiod=self.period)
+        if len(rsi) < 3:
             return {"rsi_pivot_v": False}
 
         pivot = (
@@ -75,7 +88,6 @@ class RSIVPivot(Indicator):
             and rsi.iloc[-2] < self.oversold
             and rsi.iloc[-1] > rsi.iloc[-2] + self.delta
         )
-
         volume_avg = data['volume'].tail(self.volume_window).mean()
         volume_cond = data['volume'].iloc[-1] > volume_avg
 
@@ -92,3 +104,7 @@ class RSIVPivot(Indicator):
             "volume_avg": volume_avg,
             "macd": macd.iloc[-1],
         }
+
+        return {"rsi_pivot_v": pivot, "rsi": rsi.iloc[-1]}
+
+
