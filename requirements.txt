@@ -1,0 +1,6 @@
+pandas
+talib
+python-telegram-bot
+SQLAlchemy
+python-dotenv
+psycopg2-binary
