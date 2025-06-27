@@ -24,6 +24,7 @@ Add new indicator classes in `bot/indicators.py` inheriting from `Indicator` and
 
 ### RSI Pivot V
 
+
 El indicador `RSIVPivot` detecta picos en forma de "V" en el RSI y ahora tiene en cuenta el volumen y la tendencia del MACD. Para validar la señal se requiere:
 
 1. El RSI forma una "V" desde zona de sobreventa.
@@ -31,6 +32,9 @@ El indicador `RSIVPivot` detecta picos en forma de "V" en el RSI y ahora tiene e
 3. El MACD se encuentra por encima de su línea de señal.
 
 Cuando se cumplen estas condiciones, el bot abre una posición larga como ejemplo de uso.
+=======
+Se incluye el indicador `RSIVPivot` que detecta picos en forma de "V" en el RSI. Cuando se identifica el pivote, el bot abre una posición larga en modo de ejemplo.
+
 
 ## Configuration
 
