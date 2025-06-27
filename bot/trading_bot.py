@@ -8,7 +8,7 @@ import pandas as pd
 
 from .config import Config
 from .database import Database
-from .indicators import Indicator, RSI, EMA
+from .indicators import Indicator, RSI, EMA, RSIVPivot
 from .market_data import BinanceFuturesProvider
 from .order_manager import OrderManager
 from .risk_management import RiskManager, RiskParameters
@@ -40,7 +40,10 @@ class TradingBot:
 
         self.symbol_contexts: Dict[str, SymbolContext] = {}
         for sym in config.symbols:
-            self.symbol_contexts[sym] = SymbolContext(symbol=sym, indicators=[RSI(), EMA()])
+            self.symbol_contexts[sym] = SymbolContext(
+                symbol=sym,
+                indicators=[RSI(), EMA(), RSIVPivot()],
+            )
 
     def start(self) -> None:
         threads = []
@@ -61,7 +64,10 @@ class TradingBot:
                 for ind in ctx.indicators:
                     signals.update(ind.compute(data))
 
-                # Here you would implement signal evaluation and order logic
+                if signals.get("rsi_pivot_v"):
+                    price = float(data['close'].iloc[-1])
+                    self.logger.info("Pivote RSI en V detectado en %s", symbol)
+                    self.order_manager.open_order(symbol, "long", price, signals)
                 time.sleep(1)
             except Exception as exc:  # pylint: disable=broad-except
                 self.logger.error("Error en el símbolo %s: %s", symbol, exc)
