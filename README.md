@@ -22,10 +22,12 @@ A modular trading bot skeleton for Binance Futures (USDT pairs). This project fo
 
 Add new indicator classes in `bot/indicators.py` inheriting from `Indicator` and implement the `compute` method.
 
-### RSI Pivot V
+El indicador `RSIVPivot` detecta picos en forma de "V" en el RSI y ahora tiene en cuenta el volumen y la tendencia del MACD. Para validar la señal se requiere:
 
-Se incluye el indicador `RSIVPivot` que detecta picos en forma de "V" en el RSI. Cuando se identifica el pivote, el bot abre una posición larga en modo de ejemplo.
+1. El RSI forma una "V" desde zona de sobreventa.
+2. El volumen de la vela actual supera la media de las últimas cinco velas.
+3. El MACD se encuentra por encima de su línea de señal.
 
-## Configuration
+Cuando se cumplen estas condiciones, el bot abre una posición larga como ejemplo de uso.
 
 All parameters are loaded from `.env`. Symbols, logging level and mode can be customized without modifying the code.
