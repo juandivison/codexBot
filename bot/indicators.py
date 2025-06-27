@@ -37,6 +37,21 @@ class EMA(Indicator):
         return {f"ema_{self.period}": ema_values.iloc[-1]}
 
 
+
+class ATR(Indicator):
+    """Average True Range for volatility."""
+
+    def __init__(self, period: int = 14) -> None:
+        self.period = period
+
+    def compute(self, data: pd.DataFrame) -> Dict[str, Any]:
+        atr_values = talib.ATR(
+            data['high'], data['low'], data['close'], timeperiod=self.period
+        )
+        return {"atr": atr_values.iloc[-1]}
+
+
+
 class RSIVPivot(Indicator):
     """Detecta un pivote en 'V' del RSI considerando Volumen y MACD."""
 
@@ -91,4 +106,5 @@ class RSIVPivot(Indicator):
         }
 
         return {"rsi_pivot_v": pivot, "rsi": rsi.iloc[-1]}
+
 

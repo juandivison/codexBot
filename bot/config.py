@@ -19,6 +19,8 @@ class Config:
     mode: str = "paper"  # or 'live'
     log_level: str = "INFO"
     allowed_sides: str = "both"  # 'long', 'short', or 'both'
+    leverage: float = 1.0
+    account_balance: float = 1000.0
 
 
 def load_config(env_path: Path = Path(".env")) -> Config:
@@ -37,4 +39,6 @@ def load_config(env_path: Path = Path(".env")) -> Config:
         mode=os.getenv("MODE", "paper"),
         log_level=os.getenv("LOG_LEVEL", "INFO"),
         allowed_sides=os.getenv("ALLOWED_SIDES", "both"),
+        leverage=float(os.getenv("LEVERAGE", "1")),
+        account_balance=float(os.getenv("ACCOUNT_BALANCE", "1000")),
     )
